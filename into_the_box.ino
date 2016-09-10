@@ -6,6 +6,17 @@
 * when running at a lower speed. Just you get fewer effective pixels      *
 **************************************************************************/
 
+/*
+tcd1304ap:
+pin 1 -> 5 VDC
+pin 2 -> 5 VDC
+pin 3 -> pin 13 Mega (IGC 0x80 below)
+pin 4 -> pin 10 Mega (MCLK 0x10 below)
+pin 5 -> pin 12 Mega (SH 0x40 below)
+pin 21 -> pin A0 Mega (analog input)
+pin 22 -> GND
+*/
+
 #define SH 0x40
 #define ICG 0x80
 #define MCLK 0x10
