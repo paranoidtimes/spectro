@@ -1,0 +1,5 @@
+Currently this works by pushing the code to an Arduino Mega, then running:
+$ perl read.pl
+in one terminal. then:
+$ gnuplot liveplot.gnu
+in another.
