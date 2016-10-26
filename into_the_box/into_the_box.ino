@@ -26,7 +26,11 @@ pin 22 -> GND
 
 uint16_t buffer[1847];
 
-int exposureTime = 1; // number of micro seconds for a half cycle.
+// number of micro seconds for a half cycle. Lowering this too far seems to cause a bad read every few cycles. 
+// which gets worse the lower it goes. 4 seems to be good. This however does reduce number of effective pixels
+// 1 gives about 1800 where 3 gives about 1650. Though 3 seems to give clean data, 1 gives garbage every ~5th cycle
+int exposureTime = 3; 
+int pixels = 1675;
 
 void setup()
 {
@@ -68,7 +72,7 @@ void readCCD(void)
     delayMicroseconds(exposureTime);  
     CLOCK &= ~SH;  // set SH LOW
   }
-  delayMicroseconds(300); // putting the exposure delay here seems to work
+  delayMicroseconds(150); // putting the exposure delay here seems to work
 
   /******************************************************
   * To start the chip the following magic appears to be *
@@ -96,7 +100,9 @@ void readCCD(void)
   // that this is why I have seen most people save to an array
   // then write later.
 //  for (x = 0; x < 3694; x++)  // seems that one gets a new pixel on both the high and the low...?
-    for (x = 0; x < 1847; x++)  // if one gets a new pixel on both high and low this is all that is necessary. This may not be true.
+//    for (x = 0; x < 1847; x++)  // if one gets a new pixel on both high and low this is all that is necessary. This may not be true.
+    for (x = 0; x < pixels; x++)  // if one gets a new pixel on both high and low this is all that is necessary. This may not be true.
+
   {
     delayMicroseconds(exposureTime);
     // for the moment just read here; reading after the SH goes high as well results in too much slowing
@@ -111,9 +117,9 @@ void sendData(void)
 {
   int x;
 
-  for (x = 0; x < 1847; ++x)
+  for (x = 0; x < pixels; ++x)
   {
-    if ( x % 60 == 0 || x == 1847) {
+//    if ( x % 60 == 0 || x == 1847) {
 // I couldn't get printf to work to serial, the below works
 // but feels wrong...Though I'm told it has a smaller code
 // footprint due to the lack of stdio.h
@@ -128,7 +134,7 @@ void sendData(void)
       Serial.print(buffer[x]);
       Serial.print(' ');
     }
-  }
+//  }
   Serial.print('a'); // using this to track the end of the data stream
 }
 
